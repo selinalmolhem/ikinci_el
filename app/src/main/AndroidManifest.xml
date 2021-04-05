@@ -9,13 +9,28 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Ikinci_el">
-        <activity android:name=".MainActivity">
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-1354198118616175~5158405212"/>
+        <activity android:name=".ninthActivity"></activity>
+        <activity android:name=".sigin" />
+        <activity android:name=".login" />
+        <activity android:name=".buttonsell" />
+        <activity android:name=".buylistview" />
+        <activity android:name=".sell" />
+        <activity android:name=".buy" />
+        <activity android:name=".main" />
+        <activity android:name=".mainmain">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -13,6 +14,15 @@ DBHelper DB ;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mainmain);
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent ( mainmain.this , login.class);
+                startActivity(intent);
+                finish();
+            }
+            },500);
         DB = new DBHelper(this);
         ImageView v1;
         v1=findViewById(R.id.v1);

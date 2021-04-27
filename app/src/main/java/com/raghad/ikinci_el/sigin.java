@@ -19,7 +19,7 @@ public class sigin extends AppCompatActivity {
         t1 = findViewById(R.id.name);
         t2 = findViewById(R.id.p1);
         t3 = findViewById(R.id.p2);
-        b1 = findViewById(R.id.b);
+        b1 = findViewById(R.id.save);
         DBHelper DB = new DBHelper(this);
         b1.setOnClickListener(new View.OnClickListener() {
             @Override

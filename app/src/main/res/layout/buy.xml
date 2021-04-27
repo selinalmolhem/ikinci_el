@@ -7,6 +7,7 @@
     tools:context=".buy">
 
     <TableRow
+        android:id="@+id/tableRow3"
         android:layout_width="395dp"
         android:layout_height="38dp"
         android:layout_marginStart="8dp"
@@ -18,15 +19,15 @@
 
         <TextView
             android:id="@+id/t1"
-            android:layout_width="157dp"
-            android:layout_height="wrap_content"
+            android:layout_width="137dp"
+            android:layout_height="match_parent"
             android:fontFamily="@font/aladin"
-            android:text="Main Page"
+            android:text="My Profil"
             android:textSize="25dp" />
 
         <TextView
             android:id="@+id/t2"
-            android:layout_width="143dp"
+            android:layout_width="128dp"
             android:layout_height="match_parent"
             android:fontFamily="@font/aladin"
             android:text="Lets to Buy"
@@ -37,36 +38,22 @@
         <TextView
             android:id="@+id/t3"
             android:layout_width="165dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:fontFamily="@font/aladin"
             android:text="Letts to Sell"
             android:textSize="25dp" />
+
     </TableRow>
-    <LinearLayout
-        android:layout_width="401dp"
-        android:layout_height="683dp"
-        android:orientation="vertical"
+
+    <ListView
+        android:id="@+id/seller1"
+        android:layout_width="410dp"
+        android:layout_height="682dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tableRow">
+        app:layout_constraintTop_toBottomOf="@+id/tableRow3"
+        app:layout_constraintVertical_bias="1.0" />
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="79dp">
-
-            <ImageView
-                android:id="@+id/imageView5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:srcCompat="@tools:sample/avatars" />
-
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="273dp"
-                android:layout_height="match_parent"
-                android:text="Note" />
-        </TableRow>
-
-    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

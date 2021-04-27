@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.raghad.ikinci_el">
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,10 +11,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Ikinci_el">
+        <activity android:name=".Massegler"></activity>
+
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-1354198118616175~5158405212"/>
-        <activity android:name=".ninthActivity"></activity>
+            android:value="ca-app-pub-1354198118616175~5158405212" />
+
+        <activity android:name=".profil" />
         <activity android:name=".sigin" />
         <activity android:name=".login" />
         <activity android:name=".buttonsell" />

@@ -1,6 +1,6 @@
 package com.raghad.ikinci_el;
 
-public class User {
+public class User{
     int userid;
     String username;
     String pasword;

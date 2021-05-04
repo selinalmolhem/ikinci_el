@@ -36,10 +36,11 @@ public class login extends AppCompatActivity {
         b1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String user ="";
-                String password= "";
-                user = et1.getText().toString();
-                password = et2.getText().toString();
+               // String user ="";
+                //String password= "";
+                User user1 =new User();
+               String user=user1.username = et1.getText().toString();
+              String  password=user1.pasword = et2.getText().toString();
 
                 if(user.equals("")||password.equals(""))
                     Toast.makeText(login.this, "Please enter all the fields", Toast.LENGTH_SHORT).show();

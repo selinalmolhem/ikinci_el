@@ -4,6 +4,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import androidx.annotation.Nullable;
 
 import java.io.ByteArrayOutputStream;
@@ -11,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DBHelper extends SQLiteOpenHelper {
-    public static final String DBNAME = "İkinciEL";
+    public static final String DBNAME = "İkincieEL11";
     private static final int DB_VERSION = 2;
     private static final String buy_TABLE = "buy_list";
     public static final String buy_ID = "id";
@@ -31,7 +34,8 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String sell_note = "note";
     public static final String sell_adress = "adress";
 
-    public static final String sell_photo = "photo";
+    public static final String TABLE_image = "table_image";
+    public static final String Sellimage = "sellimage";
 
     //profil
     private static final String profil_TABLE = "profil_list";
@@ -59,6 +63,7 @@ public class DBHelper extends SQLiteOpenHelper {
      //   MyDB.execSQL("create Table picture(pictureid integer primary key, picturePath TEXT  ,toolid integer references tool(toolid)   )");
         MyDB.execSQL("CREATE TABLE " +buy_TABLE+ " ("+ buy_email+" TEXT NOT NULL , "+ buy_name+" TEXT NOT NULL, "+ buy_adress+" TEXT NOT NULL, "+ buy_phone+" TEXT NOT NULL, "+ buy_message+" TEXT NOT NULL)");
         MyDB.execSQL("CREATE TABLE " +sell_TABLE+ " ("+ sell_name+" TEXT NOT NULL , "+ sell_phone+" TEXT NOT NULL, "+ sell_email+" TEXT NOT NULL, "+ sell_note+" TEXT NOT NULL, "+ sell_adress+" TEXT NOT NULL)");
+        MyDB.execSQL("CREATE TABLE " +TABLE_image+ "("+ Sellimage+" BLOB)");
 
     }
 
@@ -133,9 +138,12 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase sql = "INSERT INTO "+buy_TABLE+"VALUES {}"
 
     }*/
-  public void VeriEkle1(String ad,String phone,String email,String note,String adress){
+  public void VeriEkle1(String ad,String phone,String email,String note,String adress,byte[] image){
       SQLiteDatabase db =this.getWritableDatabase();
       ContentValues cv =new ContentValues();
+      ContentValues cv1 =new ContentValues();
+
+      User user =new User();
       // ByteArrayOutputStream outputStream =new ByteArrayOutputStream();
 
       cv.put(sell_name,ad.trim());
@@ -143,18 +151,37 @@ public class DBHelper extends SQLiteOpenHelper {
       cv.put(sell_email,email.trim());
       cv.put(sell_note,note.trim());
       cv.put(sell_adress,adress.trim());
+      cv1.put(Sellimage, image);
+      System.out.println("llllllllllllllll"+image);
       db.insert(sell_TABLE,null, cv);
+      db.insert(TABLE_image,null, cv1);
       db.close();
   }
     public List<String> VeriListele1(){
         List<String> veriler = new ArrayList<String>();
         SQLiteDatabase db = this.getReadableDatabase();
         String[] sutunler = {sell_name,sell_phone,sell_email,sell_note,sell_adress};
+        String[] sutunler1 = {Sellimage};
+        Cursor cursor1 = db.query(TABLE_image , sutunler1 ,null , null , null , null , null);
         Cursor cursor = db.query(sell_TABLE , sutunler ,null , null , null , null , null);
         while (cursor.moveToNext()){
+          //  byte[] gelenResimByte = cursor1.getBlob(0);
+            //Bitmap gelenResim = BitmapFactory.decodeByteArray(gelenResimByte,0,gelenResimByte.length);
             veriler.add(cursor.getString(0)+"\nphone : "+cursor.getString(1)+"\nEmail : "+cursor.getString(2)+"\nNote : "+cursor.getString(3)+"\nAdress : "+cursor.getString(4));
         }
 
         return veriler;
+    }
+    public Bitmap VeriListelephoto(Bitmap gelenResim){
+        //List<Bitmap> veriler = new ArrayList<Bitmap>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] sutunler = {Sellimage};
+        Cursor cursor = db.query(TABLE_image , sutunler ,null , null , null , null , null);
+        while (cursor.moveToNext()){
+            byte[] gelenResimByte = cursor.getBlob(0);
+            gelenResim = BitmapFactory.decodeByteArray(gelenResimByte,0,gelenResimByte.length);
+        }
+        return gelenResim;
+
     }
 }

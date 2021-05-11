@@ -4,18 +4,16 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteStatement;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-import androidx.annotation.Nullable;
-
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 public class DBHelper extends SQLiteOpenHelper {
-    public static final String DBNAME = "İkincieEL11";
-    private static final int DB_VERSION = 2;
+    public static final String DBNAME = "q1";
+    private static final int DB_VERSION =2;
     private static final String buy_TABLE = "buy_list";
     public static final String buy_ID = "id";
     public static final String buy_email= "email";
@@ -62,8 +60,8 @@ public class DBHelper extends SQLiteOpenHelper {
        // MyDB.execSQL("create Table tool(toolid integer primary key, toolname TEXT ,price TEXT, state boolean ,tooltypeid integer references tooltype(tooltypeid) , userid integer references user(userid)  )");
      //   MyDB.execSQL("create Table picture(pictureid integer primary key, picturePath TEXT  ,toolid integer references tool(toolid)   )");
         MyDB.execSQL("CREATE TABLE " +buy_TABLE+ " ("+ buy_email+" TEXT NOT NULL , "+ buy_name+" TEXT NOT NULL, "+ buy_adress+" TEXT NOT NULL, "+ buy_phone+" TEXT NOT NULL, "+ buy_message+" TEXT NOT NULL)");
-        MyDB.execSQL("CREATE TABLE " +sell_TABLE+ " ("+ sell_name+" TEXT NOT NULL , "+ sell_phone+" TEXT NOT NULL, "+ sell_email+" TEXT NOT NULL, "+ sell_note+" TEXT NOT NULL, "+ sell_adress+" TEXT NOT NULL)");
-        MyDB.execSQL("CREATE TABLE " +TABLE_image+ "("+ Sellimage+" BLOB)");
+        MyDB.execSQL("CREATE TABLE " +sell_TABLE+ " ("+ sell_name+" TEXT NOT NULL , "+ sell_phone+" TEXT NOT NULL, "+ sell_email+" TEXT NOT NULL, "+ sell_note+" TEXT NOT NULL, "+ sell_adress+" TEXT NOT NULL," + Sellimage+" BLOB)");
+       // MyDB.execSQL("CREATE TABLE " +TABLE_image+ "("+ Sellimage+" BLOB)");
 
     }
 
@@ -141,9 +139,7 @@ public class DBHelper extends SQLiteOpenHelper {
   public void VeriEkle1(String ad,String phone,String email,String note,String adress,byte[] image){
       SQLiteDatabase db =this.getWritableDatabase();
       ContentValues cv =new ContentValues();
-      ContentValues cv1 =new ContentValues();
 
-      User user =new User();
       // ByteArrayOutputStream outputStream =new ByteArrayOutputStream();
 
       cv.put(sell_name,ad.trim());
@@ -151,23 +147,22 @@ public class DBHelper extends SQLiteOpenHelper {
       cv.put(sell_email,email.trim());
       cv.put(sell_note,note.trim());
       cv.put(sell_adress,adress.trim());
-      cv1.put(Sellimage, image);
+      cv.put(Sellimage, image);
+      System.out.println(note.trim());
       System.out.println("llllllllllllllll"+image);
       db.insert(sell_TABLE,null, cv);
-      db.insert(TABLE_image,null, cv1);
       db.close();
   }
-    public List<String> VeriListele1(){
-        List<String> veriler = new ArrayList<String>();
+    Sell_java ss= new Sell_java();
+    public List<Sell_java> VeriListele1(){
+        List<Sell_java> veriler = new ArrayList<Sell_java>();
         SQLiteDatabase db = this.getReadableDatabase();
-        String[] sutunler = {sell_name,sell_phone,sell_email,sell_note,sell_adress};
-        String[] sutunler1 = {Sellimage};
-        Cursor cursor1 = db.query(TABLE_image , sutunler1 ,null , null , null , null , null);
+        String[] sutunler = {sell_name,sell_phone,sell_email,sell_note,sell_adress,Sellimage};
         Cursor cursor = db.query(sell_TABLE , sutunler ,null , null , null , null , null);
         while (cursor.moveToNext()){
           //  byte[] gelenResimByte = cursor1.getBlob(0);
             //Bitmap gelenResim = BitmapFactory.decodeByteArray(gelenResimByte,0,gelenResimByte.length);
-            veriler.add(cursor.getString(0)+"\nphone : "+cursor.getString(1)+"\nEmail : "+cursor.getString(2)+"\nNote : "+cursor.getString(3)+"\nAdress : "+cursor.getString(4));
+        //    veriler.add(cursor.getString(cursor.getColumnIndex("0"))+"\nphone : "+cursor.getString(1)+"\nEmail : "+cursor.getString(2)+"\nNote : "+cursor.getString(3)+"\nAdress : "+cursor.getString(4));
         }
 
         return veriler;
@@ -182,6 +177,41 @@ public class DBHelper extends SQLiteOpenHelper {
             gelenResim = BitmapFactory.decodeByteArray(gelenResimByte,0,gelenResimByte.length);
         }
         return gelenResim;
+
+    }
+    public void deletedata (String ad)
+    {
+        SQLiteDatabase MyDB = this.getWritableDatabase();
+        String sql ="DELETE FROM sell_list WHERE ad=?";
+        SQLiteStatement statement =MyDB.compileStatement(sql);
+        statement.clearBindings();
+        statement.bindString(1, String.valueOf(ad));
+        statement.execute();
+        MyDB.execSQL("delete from  sell_list where ad ="+ad);
+        MyDB.close();
+    }
+    public void deleteSell(String ad){
+        SQLiteDatabase db = this.getWritableDatabase();
+        long result = db.delete("sell_list","ad=?", new String[]{ad});
+    }
+    public Cursor getData(String sql){
+        SQLiteDatabase database =getReadableDatabase();
+        return database.rawQuery(sql,null);
+
+    }
+    void updatasell(String ad,String phone,String email,String note,String adress,byte[] image){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(sell_name, ad);
+        cv.put(sell_phone, phone);
+        cv.put(sell_email, email);
+        cv.put(sell_note, note);
+        cv.put(sell_adress, adress);
+        cv.put(Sellimage, image);
+        System.out.println(note.trim());
+        System.out.println("llllllllllllllll"+image);
+        long result = db.update("sell_list",cv,"ad=?", new String[]{ad});
+        db.close();
 
     }
 }

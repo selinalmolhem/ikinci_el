@@ -10,6 +10,8 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteStatement;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.ImageDecoder;
@@ -45,25 +47,50 @@ public class buttonsell extends AppCompatActivity {
         e10 = findViewById(R.id.e10);
         e11 = findViewById(R.id.e11);
         e12 = findViewById(R.id.e12);
-        e13 = findViewById(R.id.e14);
+        e13 = findViewById(R.id.e13);
         e14 = findViewById(R.id.e14);
         imageResim = findViewById(R.id.imageView6);
+
 
         b = findViewById(R.id.save);
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String e10TEXT =e10.getText().toString();
+                String e11TEXT =e11.getText().toString();
+                String e12TEXT =e12.getText().toString();
+                String e13TEXT =e13.getText().toString();
+                String e14TEXT =e14.getText().toString();
+                System.out.println("hhhhhiiiii"+e14.getText().toString());
+
                 ByteArrayOutputStream outputStream =new ByteArrayOutputStream();
                 kucultulenResim = resimKucult(secilenresim);
                 secilenresim.compress(Bitmap.CompressFormat.PNG,75, outputStream);
                 byte[] kayitEdilecekRseim = outputStream.toByteArray();
                 try {
-                    db.VeriEkle1(e10.getText().toString(), e11.getText().toString(), e12.getText().toString(), e13.getText().toString(), e14.getText().toString(),kayitEdilecekRseim);
+
+                   // db.VeriEkle1(e10.getText().toString(), e11.getText().toString(), e12.getText().toString(), e13.getText().toString(), e14.getText().toString(),kayitEdilecekRseim);
+                    SQLiteDatabase database = openOrCreateDatabase("q1",MODE_PRIVATE,null);
+                    database.execSQL("CREATE TABLE IF NOT EXISTS sell_list (ad TEXT NOT NULL, phone TEXT NOT NULL, email TEXT NOT NULL, note TEXT NOT NULL, adress TEXT NOT NULL, sellimage BLOB)");
+                    String sqlsorgu ="INSERT INTO sell_list(ad, phone, email, note, adress, sellimage) VALUES (?,?,?,?,?,?)";
+                    SQLiteStatement statement = database.compileStatement(sqlsorgu);
+                    statement.bindString(1, e10TEXT);
+                    statement.bindString(2, e11TEXT);
+                    statement.bindString(3, e12TEXT);
+                    statement.bindString(4, e14TEXT);
+                    statement.bindString(5, e13TEXT);
+                    System.out.println("jfjjfjjf"+e10TEXT);
+                    statement.bindBlob(6,kayitEdilecekRseim);
+                    statement.execute();
+
+                    nesnelerıTemızle();
+                    Toast.makeText(buttonsell.this, "Save Successfully", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(buttonsell.this,sell.class);
+                    startActivity(intent);
                 }catch (Exception e){
                     e.printStackTrace();
                 }
-                nesnelerıTemızle();
-                Toast.makeText(buttonsell.this, "Save Successfully", Toast.LENGTH_SHORT).show();
+
             }
         });
 
@@ -79,7 +106,7 @@ public class buttonsell extends AppCompatActivity {
 
     }
     private Bitmap resimKucult(Bitmap resim){
-        return Bitmap.createScaledBitmap(resim,70,70,true);
+        return Bitmap.createScaledBitmap(resim,300,300,true);
     }
     public void resimSec(View v) {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
